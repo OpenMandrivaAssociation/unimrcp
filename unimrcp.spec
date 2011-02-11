@@ -79,7 +79,6 @@ This package contains development part of UniMRCP.
 perl -pi -w -e 's/lib\/pkgconfig/pkgconfig/g' configure
 
 %configure2_5x \
-    LDFLAGS=-rpath=%{_datadir}/unimrcp-deps/lib \
     --sysconfdir=%{_sysconfdir}/%{name} \
     --with-apr=%{_datadir}/unimrcp-deps \
     --with-apr-util=%{_datadir}/unimrcp-deps \
@@ -92,7 +91,7 @@ perl -pi -w -e 's/lib\/pkgconfig/pkgconfig/g' configure
 %install
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
 
-%makeinstall_std DESTDIR=%{buildroot} install
+%makeinstall_std
 
 install -d -m1775 %{buildroot}%{_sysconfdir}/%{name}/conf/client-profiles
 install -m0664 conf/client-profiles/*.xml %{buildroot}%{_sysconfdir}/%{name}/conf/client-profiles/
