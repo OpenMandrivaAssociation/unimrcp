@@ -17,14 +17,14 @@ Source: %{name}.tar.gz
 Source1: %{name}server.init
 
 BuildRequires: libexpat-devel
-BuildRequires: libunimrcp-deps-devel
+BuildRequires: unimrcp-deps-devel
 BuildRequires: pocketsphinx-devel
 BuildRequires: sphinxbase-devel
 #BuildRequires: flite-devel >= 1.3.9
 
-Requires: libunimrcp
-Requires: libunimrcp-deps
-Requires: pocketsphinx-libs
+Requires: lib%{name}
+Requires: unimrcp-deps
+Requires: libpocketsphinx
 #Requires: flite
 
 %description
@@ -48,11 +48,13 @@ MRCP version independent user level interface for the integration.
 %package -n %{libs}
 Summary: Media Resource Control Protocol Stack shared librarries
 Group: System/Libraries
+Provides: lib%{name} = %{version}-%{release}
 
 %package -n %{devel}
 Summary: Media Resource Control Protocol Stack development
 Group: Development/C
-Requires: libunimrcp = %version-%release
+Provides: %{name}-devel = %{version}-%{release}
+Requires: lib%{name} = %{version}-%{release}, pkgconfig
 
 %description -n %{libs}
 UniMRCP is an open source cross-platform MRCP implementation, which provides
