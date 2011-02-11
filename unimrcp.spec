@@ -17,7 +17,7 @@ Source: %{name}.tar.gz
 Source1: %{name}server.init
 
 BuildRequires: libexpat-devel
-BuildRequires: unimrcp-deps-devel
+BuildRequires: libunimrcp-deps-devel
 BuildRequires: pocketsphinx-devel
 BuildRequires: sphinxbase-devel
 #BuildRequires: flite-devel >= 1.3.9
