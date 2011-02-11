@@ -5,7 +5,7 @@
 
 Name: %{name}
 Version: 0.%svnrelease
-Release: %mkrel 0
+Release: %mkrel 1
 
 Summary: Media Resource Control Protocol Stack
 License: Apache
@@ -23,7 +23,7 @@ BuildRequires: sphinxbase-devel
 #BuildRequires: flite-devel >= 1.3.9
 
 Requires: lib%{name}
-Requires: unimrcp-deps
+Requires: libunimrcp-deps
 Requires: libpocketsphinx
 #Requires: flite
 
