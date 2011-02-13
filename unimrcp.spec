@@ -5,7 +5,7 @@
 
 Name: %{name}
 Version: 0.%svnrelease
-Release: %mkrel 1
+Release: %mkrel 2
 
 Summary: Media Resource Control Protocol Stack
 License: Apache
@@ -53,7 +53,7 @@ Provides: lib%{name} = %{version}-%{release}
 %package -n %{devel}
 Summary: Media Resource Control Protocol Stack development
 Group: Development/C
-Provides: %{name}-devel = %{version}-%{release}
+Provides: lib%{name}-devel = %{version}-%{release}
 Requires: lib%{name} = %{version}-%{release}, pkgconfig
 
 %description -n %{libs}
