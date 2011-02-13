@@ -77,6 +77,9 @@ This package contains development part of UniMRCP.
 [ ! -x ./bootstrap ] || ./bootstrap
 
 perl -pi -w -e 's/lib\/pkgconfig/pkgconfig/g' configure
+perl -pi -w -e 's/^confdir=([\W])\$\{prefix\}/confdir=$1\$\(DESTDIR\)\$\{prefix\}/g' configure
+perl -pi -w -e 's/^logdir=([\W])\$\{prefix\}/logdir=$1\$\(DESTDIR\)\$\{prefix\}/g' configure
+perl -pi -w -e 's/^datadir=([\W])\$\{prefix\}/datadir=$1\$\(DESTDIR\)\$\{prefix\}/g' configure
 
 %configure2_5x \
     --sysconfdir=%{_sysconfdir}/%{name} \
@@ -93,16 +96,10 @@ perl -pi -w -e 's/lib\/pkgconfig/pkgconfig/g' configure
 
 %makeinstall_std
 
-install -d -m1775 %{buildroot}%{_sysconfdir}/%{name}/conf/client-profiles
-install -m0664 conf/client-profiles/*.xml %{buildroot}%{_sysconfdir}/%{name}/conf/client-profiles/
-install -m0664 conf/*.xsd %{buildroot}%{_sysconfdir}/%{name}/conf/
-install -m0664 conf/*.xml %{buildroot}%{_sysconfdir}/%{name}/conf/
-install -m0664 plugins/mrcp-pocketsphinx/conf/*.xml %{buildroot}%{_sysconfdir}/%{name}/conf/
-
-install -d -m1775 %{buildroot}%{_datadir}/%{name}
-install -m0664 data/*.pcm %{buildroot}%{_datadir}/%{name}/
-install -m0664 data/*.xml %{buildroot}%{_datadir}/%{name}/
-install -m0664 data/grammar.* %{buildroot}%{_datadir}/%{name}/
+install -d -m1775 %{buildroot}%{_sysconfdir}/%{name}
+mv -f %{buildroot}/usr/conf %{buildroot}%{_sysconfdir}/%{name}/
+mv -f %{buildroot}/usr/data %{buildroot}%{_sysconfdir}/%{name}/
+mv -f %{buildroot}/usr/log %{buildroot}%{_sysconfdir}/%{name}/
 mv -f %{buildroot}/usr/plugin %{buildroot}%{_sysconfdir}/%{name}/
 
 install -d -m1775 %{buildroot}%{_sysconfdir}/rc.d/init.d
@@ -119,8 +116,9 @@ rm -fr %{buildroot}
 %config(noreplace) %{_sysconfdir}/%{name}/conf/client-profiles/*.xml
 %{_bindir}/*
 %{_sysconfdir}/%{name}/plugin
+%{_sysconfdir}/%{name}/data
+%{_sysconfdir}/%{name}/log
 %{_sysconfdir}/rc.d/init.d/*
-%{_datadir}/%{name}
 
 %files -n %{libs}
 %defattr(-,root,root)
