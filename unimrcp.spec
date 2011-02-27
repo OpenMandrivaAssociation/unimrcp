@@ -5,7 +5,7 @@
 
 Name: %{name}
 Version: 0.%svnrelease
-Release: %mkrel 2
+Release: %mkrel 3
 
 Summary: Media Resource Control Protocol Stack
 License: Apache
