@@ -16,6 +16,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}
 Source: %{name}.tar.gz
 Source1: %{name}server.init
 
+BuildRequires: pkgconfig
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: libexpat-devel
 BuildRequires: libunimrcp-deps-devel
 BuildRequires: pocketsphinx-devel
