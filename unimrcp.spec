@@ -1,11 +1,11 @@
-%define svnrelease 1798
+%define svnrelease 1815
 %define name unimrcp
 %define devel %mklibname %{name} -d
 %define libs %mklibname %{name}
 
 Name: %{name}
 Version: 0.%svnrelease
-Release: %mkrel 4
+Release: %mkrel 0
 
 Summary: Media Resource Control Protocol Stack
 License: Apache
