@@ -1,3 +1,4 @@
+%define __find_provides %{nil}
 %define svnrelease 1815
 %define name unimrcp
 %define devel %mklibname %{name} -d
@@ -5,7 +6,7 @@
 
 Name: %{name}
 Version: 0.%svnrelease
-Release: %mkrel 0
+Release: %mkrel 1
 
 Summary: Media Resource Control Protocol Stack
 License: Apache
