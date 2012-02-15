@@ -1,4 +1,3 @@
-%define __find_provides %{nil}
 %define svnrelease 1815
 %define name unimrcp
 %define devel %mklibname %{name} -d
