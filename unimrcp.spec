@@ -1,26 +1,24 @@
-%define svnrelease 1815
 %define name unimrcp
-%define devel %mklibname %{name} -d
-%define libs %mklibname %{name}
-%define subrel 1
+%define develname %mklibname %{name} -d
+%define develname_st %mklibname %{name} -d -s
+%define libname %mklibname %{name}
 
 Name: %{name}
-Version: 0.%svnrelease
-Release: %mkrel 1
+Version: 1.0.0
+Release: 2
 
 Summary: Media Resource Control Protocol Stack
 License: Apache
 Group: System/Servers
 Url: http://unimrcp.org
-BuildRoot: %{_tmppath}/%{name}-%{version}
 
-Source: %{name}.tar.gz
+Source0: http://unimrcp.googlecode.com/files/%{name}-%{version}.tar.gz
 Source1: %{name}server.init
 
 BuildRequires: pkgconfig
 BuildRequires: autoconf
 BuildRequires: automake
-BuildRequires: libexpat-devel
+BuildRequires: expat-devel
 BuildRequires: libunimrcp-deps-devel
 BuildRequires: pocketsphinx-devel
 BuildRequires: sphinxbase-devel
@@ -28,7 +26,6 @@ BuildRequires: sphinxbase-devel
 
 Requires: lib%{name}
 Requires: libunimrcp-deps
-Requires: libpocketsphinx
 #Requires: flite
 
 %description
@@ -49,33 +46,50 @@ everything required for MRCP client and server side deployment.
 UniMRCP encapsulates SIP/MRCPv2, RTSP, SDP and RTP stacks inside and provides
 MRCP version independent user level interface for the integration.
 
-%package -n %{libs}
+%package -n %{libname}
 Summary: Media Resource Control Protocol Stack shared librarries
 Group: System/Libraries
 Provides: lib%{name} = %{version}-%{release}
 
-%package -n %{devel}
-Summary: Media Resource Control Protocol Stack development
-Group: Development/C
-Provides: lib%{name}-devel = %{version}-%{release}
-Requires: lib%{name} = %{version}-%{release}, pkgconfig
-
-%description -n %{libs}
+%description -n %{libname}
 UniMRCP is an open source cross-platform MRCP implementation, which provides
 everything required for MRCP client and server side deployment.
 UniMRCP encapsulates SIP/MRCPv2, RTSP, SDP and RTP stacks inside and provides
 MRCP version independent user level interface for the integration.
 This package contains UniMRCP shared libraries
 
-%description -n %{devel}
+%package -n %{develname}
+Summary: Media Resource Control Protocol Stack develnameopment
+Group: Development/C
+Provides: lib%{name}-devel = %{version}-%{release}
+Provides: %{name}-devel = %{version}-%{release}
+Requires: lib%{name} = %{version}-%{release}, pkgconfig
+
+%description -n %{develname}
 UniMRCP is an open source cross-platform MRCP implementation, which provides
 everything required for MRCP client and server side deployment.
 UniMRCP encapsulates SIP/MRCPv2, RTSP, SDP and RTP stacks inside and provides
 MRCP version independent user level interface for the integration.
 This package contains development part of UniMRCP.
 
+
+%package -n %{develname_st}
+Summary: Media Resource Control Protocol Stack develnameopment
+Group: Development/C
+Provides: lib%{name}-static-devel = %{version}-%{release}
+Provides: %{name}-static-devel = %{version}-%{release}
+Requires:  %{name}-devel = %{version}-%{release}
+
+%description -n %{develname_st}
+UniMRCP is an open source cross-platform MRCP implementation, which provides
+everything required for MRCP client and server side deployment.
+UniMRCP encapsulates SIP/MRCPv2, RTSP, SDP and RTP stacks inside and provides
+MRCP version independent user level interface for the integration.
+This package contains development part of UniMRCP.
+
+
 %prep
-%setup -q -n %{name}
+%setup -q
 
 %build
 [ ! -x ./bootstrap ] || ./bootstrap
@@ -96,24 +110,18 @@ perl -pi -w -e 's/^datadir=([\W])\$\{prefix\}/datadir=$1\$\(DESTDIR\)\$\{prefix\
 #    --enable-flite-plugin \
 
 %install
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
-
 %makeinstall_std
 
-install -d -m1775 %{buildroot}%{_sysconfdir}/%{name}
+install -d -m0775 %{buildroot}%{_sysconfdir}/%{name}
 mv -f %{buildroot}/usr/conf %{buildroot}%{_sysconfdir}/%{name}/
 mv -f %{buildroot}/usr/data %{buildroot}%{_sysconfdir}/%{name}/
 mv -f %{buildroot}/usr/log %{buildroot}%{_sysconfdir}/%{name}/
 mv -f %{buildroot}/usr/plugin %{buildroot}%{_sysconfdir}/%{name}/
 
-install -d -m1775 %{buildroot}%{_sysconfdir}/rc.d/init.d
+install -d -m0775 %{buildroot}%{_sysconfdir}/rc.d/init.d
 install -m755 %{SOURCE1} %{buildroot}%{_sysconfdir}/rc.d/init.d/%{name}server
 
-%clean
-rm -fr %{buildroot}
-
 %files
-%defattr(-,root,root)
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/conf/*.xml
 %config(noreplace) %{_sysconfdir}/%{name}/conf/*.xsd
@@ -124,14 +132,13 @@ rm -fr %{buildroot}
 %{_sysconfdir}/%{name}/log
 %{_sysconfdir}/rc.d/init.d/*
 
-%files -n %{libs}
-%defattr(-,root,root)
+%files -n %{libname}
 %{_libdir}/*.so
 %{_libdir}/*.so.*
 
-%files -n %{devel}
-%defattr(-,root,root)
+%files -n %{develname}
 %{_includedir}/*
-%{_libdir}/*.a
-%{_libdir}/*.la
 %{_libdir}/pkgconfig/*.pc
+
+%files -n %{develname_st}
+%{_libdir}/*.a

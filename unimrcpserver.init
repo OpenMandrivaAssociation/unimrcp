@@ -1,0 +1,46 @@
+#! /bin/sh
+#
+# unimrcpserver         Script to control the MRCP server
+#
+# chkconfig: 2345 99 7
+# description: Media Resource Control Protocol (MRCP) server
+#
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+case "$1" in
+  start)
+        echo -n "Starting unimrcpserver: "
+        daemon unimrcpserver --daemon --root-dir /etc/unimrcp --log-output 0
+        echo
+        touch /var/lock/subsys/unimrcpserver
+        ;;
+
+  stop)
+        echo -n "Shutting down unimrcpserver: "
+	killproc unimrcpserver
+        echo
+        rm -f /var/lock/subsys/unimrcpserver
+        ;;
+
+  reload)
+	$0 stop
+	$0 start
+	;;
+
+  restart)
+	$0 stop
+	$0 start
+	;;
+
+  status)
+	status unimrcpserver
+	;;
+
+  *)
+        echo "Usage: unimrcpserver {start|stop|restart|reload|status}"
+        exit 1
+esac
+
+exit 0
