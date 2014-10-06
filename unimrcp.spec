@@ -1,11 +1,10 @@
 %define name unimrcp
 %define develname %mklibname %{name} -d
-%define develname_st %mklibname %{name} -d -s
 %define libname %mklibname %{name}
 
 Name: %{name}
 Version: 1.0.0
-Release: 2
+Release: 4
 
 Summary: Media Resource Control Protocol Stack
 License: Apache
@@ -13,7 +12,7 @@ Group: System/Servers
 Url: http://unimrcp.org
 
 Source0: http://unimrcp.googlecode.com/files/%{name}-%{version}.tar.gz
-Source1: %{name}server.init
+Source1: %{name}server.service
 
 BuildRequires: pkgconfig
 BuildRequires: autoconf
@@ -22,6 +21,7 @@ BuildRequires: expat-devel
 BuildRequires: libunimrcp-deps-devel
 BuildRequires: pocketsphinx-devel
 BuildRequires: sphinxbase-devel
+BuildRequires: pkgconfig(sndfile)
 #BuildRequires: flite-devel >= 1.3.9
 
 Requires: lib%{name}
@@ -72,22 +72,6 @@ UniMRCP encapsulates SIP/MRCPv2, RTSP, SDP and RTP stacks inside and provides
 MRCP version independent user level interface for the integration.
 This package contains development part of UniMRCP.
 
-
-%package -n %{develname_st}
-Summary: Media Resource Control Protocol Stack develnameopment
-Group: Development/C
-Provides: lib%{name}-static-devel = %{version}-%{release}
-Provides: %{name}-static-devel = %{version}-%{release}
-Requires:  %{name}-devel = %{version}-%{release}
-
-%description -n %{develname_st}
-UniMRCP is an open source cross-platform MRCP implementation, which provides
-everything required for MRCP client and server side deployment.
-UniMRCP encapsulates SIP/MRCPv2, RTSP, SDP and RTP stacks inside and provides
-MRCP version independent user level interface for the integration.
-This package contains development part of UniMRCP.
-
-
 %prep
 %setup -q
 
@@ -106,7 +90,8 @@ perl -pi -w -e 's/^datadir=([\W])\$\{prefix\}/datadir=$1\$\(DESTDIR\)\$\{prefix\
     --with-sofia-sip=%{_datadir}/unimrcp-deps/lib \
     --with-sphinxbase=%{_libdir} \
     --with-pocketsphinx=%{_libdir} \
-    --enable-pocketsphinx-plugin
+    --enable-pocketsphinx-plugin \
+    --disable-static
 #    --enable-flite-plugin \
 
 %install
@@ -118,8 +103,7 @@ mv -f %{buildroot}/usr/data %{buildroot}%{_sysconfdir}/%{name}/
 mv -f %{buildroot}/usr/log %{buildroot}%{_sysconfdir}/%{name}/
 mv -f %{buildroot}/usr/plugin %{buildroot}%{_sysconfdir}/%{name}/
 
-install -d -m0775 %{buildroot}%{_sysconfdir}/rc.d/init.d
-install -m755 %{SOURCE1} %{buildroot}%{_sysconfdir}/rc.d/init.d/%{name}server
+install -D -m0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}server.service
 
 %files
 %dir %{_sysconfdir}/%{name}
@@ -130,7 +114,7 @@ install -m755 %{SOURCE1} %{buildroot}%{_sysconfdir}/rc.d/init.d/%{name}server
 %{_sysconfdir}/%{name}/plugin
 %{_sysconfdir}/%{name}/data
 %{_sysconfdir}/%{name}/log
-%{_sysconfdir}/rc.d/init.d/*
+%attr(0644,root,root) %{_unitdir}/%{name}server.service
 
 %files -n %{libname}
 %{_libdir}/*.so
@@ -139,6 +123,3 @@ install -m755 %{SOURCE1} %{buildroot}%{_sysconfdir}/rc.d/init.d/%{name}server
 %files -n %{develname}
 %{_includedir}/*
 %{_libdir}/pkgconfig/*.pc
-
-%files -n %{develname_st}
-%{_libdir}/*.a

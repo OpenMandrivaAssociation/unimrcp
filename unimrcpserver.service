@@ -1,0 +1,11 @@
+[Unit]
+Description=Media Resource Control Protocol (MRCP) server
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/unimrcpserver --root-dir /etc/unimrcp --log-output 0
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
