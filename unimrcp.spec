@@ -9,7 +9,7 @@ Release: 5
 Summary: Media Resource Control Protocol Stack
 License: Apache
 Group: System/Servers
-Url: http://unimrcp.org
+Url: https://unimrcp.org
 
 Source0: http://unimrcp.googlecode.com/files/%{name}-%{version}.tar.gz
 Source1: %{name}server.service
